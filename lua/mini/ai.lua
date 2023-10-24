@@ -1182,6 +1182,7 @@ end
 H.expr_textobject = function(mode, ai_type, opts)
   local tobj_id = H.user_textobject_id(ai_type)
 
+  if tobj_id == '<esc>' then return '<esc>' end
   if tobj_id == nil then return '' end
 
   -- Possibly fall back to builtin `a`/`i` textobjects
@@ -1856,7 +1857,8 @@ H.user_textobject_id = function(ai_type)
   H.unecho()
 
   -- Terminate if couldn't get input (like with <C-c>) or it is `<Esc>`
-  if not ok or char == '\27' then return nil end
+  if not ok then return nil end
+  if char == '\27' then return '<esc>' end
 
   if char:find('^[%w%p%s]$') == nil then
     H.message('Input must be single character: alphanumeric, punctuation, or space.')
